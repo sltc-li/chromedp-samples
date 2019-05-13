@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/chromedp/cdproto/network"
 	"github.com/chromedp/chromedp"
 	"github.com/pkg/errors"
 
@@ -39,15 +38,7 @@ func (f *fablic) Login(ctx context.Context, email, password string) error {
 			chromedp.Click("#l_sdk-chrome > div.relative.stage > div:nth-child(1) > div > form > button"),
 			chromedp.Sleep(time.Second),
 			chromedp.ActionFunc(func(ctxt context.Context) error {
-				cookies, err := network.GetAllCookies().Do(ctxt)
-				if err != nil {
-					return errors.WithStack(err)
-				}
-				f.logger.Println("Save cookies")
-				if err := cs.SaveCookies(cookies); err != nil {
-					return errors.WithStack(err)
-				}
-				return nil
+				return errors.WithStack(cs.SaveCookies(ctxt))
 			}),
 		}
 		return errors.WithStack(tasks.Do(ctxt))

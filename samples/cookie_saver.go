@@ -69,7 +69,13 @@ func (cs *CookieSaver) RestoreCookies(ctx context.Context, checkURL string) bool
 	return url == checkURL
 }
 
-func (cs *CookieSaver) SaveCookies(cookies []*network.Cookie) error {
+func (cs *CookieSaver) SaveCookies(ctx context.Context) error {
+	cookies, err := network.GetAllCookies().Do(ctx)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	cs.Logger.Println("Save cookies")
 	buf, err := json.Marshal(cookies)
 	if err != nil {
 		return errors.WithStack(err)

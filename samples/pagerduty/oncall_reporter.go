@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/chromedp/cdproto/network"
 	"github.com/chromedp/chromedp"
 	"github.com/pkg/errors"
 
@@ -38,15 +37,7 @@ func (p *pagerduty) Login(ctx context.Context, organization, email, password str
 			chromedp.Click("#login_form > fieldset > div:nth-child(4) > div > div > input"),
 			chromedp.Sleep(time.Second),
 			chromedp.ActionFunc(func(ctxt context.Context) error {
-				cookies, err := network.GetAllCookies().Do(ctxt)
-				if err != nil {
-					return errors.WithStack(err)
-				}
-				p.logger.Println("Save cookies")
-				if err := cs.SaveCookies(cookies); err != nil {
-					return errors.WithStack(err)
-				}
-				return nil
+				return errors.WithStack(cs.SaveCookies(ctxt))
 			}),
 		}
 		return errors.WithStack(tasks.Do(ctxt))

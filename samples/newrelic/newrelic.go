@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/chromedp/cdproto/cdp"
-	"github.com/chromedp/cdproto/network"
 	"github.com/chromedp/chromedp"
 	"github.com/pkg/errors"
 
@@ -41,15 +40,7 @@ func (n *newrelic) Login(ctx context.Context, email, password string) error {
 			chromedp.Click("#login_submit"),
 			chromedp.Sleep(time.Second),
 			chromedp.ActionFunc(func(ctxt context.Context) error {
-				cookies, err := network.GetAllCookies().Do(ctxt)
-				if err != nil {
-					return errors.WithStack(err)
-				}
-				n.logger.Println("Save cookies")
-				if err := cs.SaveCookies(cookies); err != nil {
-					return errors.WithStack(err)
-				}
-				return nil
+				return errors.WithStack(cs.SaveCookies(ctxt))
 			}),
 		}
 		return errors.WithStack(tasks.Do(ctxt))
