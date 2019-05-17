@@ -1,4 +1,4 @@
-module github.com/liyy7/chromedp-samples
+module github.com/li-go/chromedp-samples
 
 require (
 	github.com/chromedp/cdproto v0.0.0-20190429085128-1aa4f57ff2a9
