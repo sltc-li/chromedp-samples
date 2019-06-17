@@ -28,8 +28,6 @@ func (p *pagerduty) Login(ctx context.Context, organization, email, password str
 
 	p.logger.Println("Login to pagerduty.com")
 	if err := chromedp.Run(ctx, chromedp.ActionFunc(func(ctxt context.Context) error {
-		ctxt, cancel := context.WithTimeout(ctxt, 5*time.Second)
-		defer cancel()
 		tasks := chromedp.Tasks{
 			chromedp.Navigate("https://" + organization + ".pagerduty.com/sign_in"),
 			chromedp.SendKeys("#user_email", email, chromedp.NodeVisible),
@@ -60,8 +58,6 @@ func (p *pagerduty) GetOncallCount(ctx context.Context, organization string) (in
 
 	var count string
 	if err := chromedp.Run(ctx, chromedp.ActionFunc(func(ctxt context.Context) error {
-		ctxt, cancel := context.WithTimeout(ctxt, 10*time.Second)
-		defer cancel()
 		tasks := chromedp.Tasks{
 			chromedp.Navigate(url),
 			chromedp.Text(sel, &count, chromedp.NodeVisible),

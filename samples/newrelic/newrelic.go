@@ -31,8 +31,6 @@ func (n *newrelic) Login(ctx context.Context, email, password string) error {
 
 	n.logger.Println("Login to newrelic.com")
 	if err := chromedp.Run(ctx, chromedp.ActionFunc(func(ctxt context.Context) error {
-		ctxt, cancel := context.WithTimeout(ctxt, 5*time.Second)
-		defer cancel()
 		tasks := chromedp.Tasks{
 			chromedp.Navigate("https://login.newrelic.com/login"),
 			chromedp.SendKeys("#login_email", email, chromedp.NodeVisible),
@@ -56,8 +54,6 @@ func (n *newrelic) GetErrorRate(ctx context.Context) (float64, error) {
 
 	var errorRate string
 	if err := chromedp.Run(ctx, chromedp.ActionFunc(func(ctxt context.Context) error {
-		ctxt, cancel := context.WithTimeout(ctxt, 10*time.Second)
-		defer cancel()
 		tasks := chromedp.Tasks{
 			chromedp.Navigate(setTimeWindowURL),
 			chromedp.Text("#hosts_content_container > section > h3 > div > p", &errorRate, chromedp.NodeVisible),
@@ -105,8 +101,6 @@ func (n *newrelic) fapPrepareActions(setTimeWindowURL string) chromedp.Tasks {
 
 	return chromedp.Tasks{chromedp.Navigate(applicationURL),
 		chromedp.ActionFunc(func(ctxt context.Context) error {
-			ctxt, cancel := context.WithTimeout(ctxt, 5*time.Second)
-			defer cancel()
 			var loaded bool
 			action := chromedp.Evaluate("(typeof $ !== 'undefined' && typeof $.post === 'function')", &loaded)
 			for {
@@ -125,8 +119,6 @@ func (n *newrelic) fapPrepareActions(setTimeWindowURL string) chromedp.Tasks {
 }
 func (n *newrelic) fapAppResponseActions(transactionID string, appResponse *int) chromedp.Action {
 	return chromedp.ActionFunc(func(ctxt context.Context) error {
-		ctxt, cancel := context.WithTimeout(ctxt, 10*time.Second)
-		defer cancel()
 		var text string
 		if err := chromedp.Text("#tab_content_app_server_performance_breakdown > div.selectable_chart.response_chart > h2 > div:nth-child(1) > p.value",
 			&text, chromedp.NodeVisible).Do(ctxt); err != nil {
@@ -143,8 +135,6 @@ func (n *newrelic) fapAppResponseActions(transactionID string, appResponse *int)
 
 func (n *newrelic) fapAppHistogramActions(transactionID string, appHistogram *int) chromedp.Action {
 	return chromedp.ActionFunc(func(ctxt context.Context) error {
-		ctxt, cancel := context.WithTimeout(ctxt, 10*time.Second)
-		defer cancel()
 		tasks := chromedp.Tasks{
 			chromedp.Click("#tab_content_app_server_performance_breakdown > div.selectable_chart.response_chart > h2 > ul > li > ul > li.app_histogram"),
 			chromedp.ActionFunc(func(ctxt context.Context) error {
@@ -174,8 +164,6 @@ func (n *newrelic) fapAppHistogramActions(transactionID string, appHistogram *in
 
 func (n *newrelic) fapAppPercentileActions(transactionID string, appPercentile *int) chromedp.Action {
 	return chromedp.ActionFunc(func(ctxt context.Context) error {
-		ctxt, cancel := context.WithTimeout(ctxt, 10*time.Second)
-		defer cancel()
 		action := chromedp.ActionFunc(func(ctxt context.Context) error {
 			var textNodes []*cdp.Node
 			var text string

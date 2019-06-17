@@ -29,8 +29,6 @@ func (f *fablic) Login(ctx context.Context, email, password string) error {
 
 	f.logger.Println("Login to fabric.io")
 	if err := chromedp.Run(ctx, chromedp.ActionFunc(func(ctxt context.Context) error {
-		ctxt, cancel := context.WithTimeout(ctxt, 5*time.Second)
-		defer cancel()
 		tasks := chromedp.Tasks{
 			chromedp.Navigate("https://fabric.io/login"),
 			chromedp.SendKeys("#email", email, chromedp.NodeVisible),
@@ -66,8 +64,6 @@ func (f *fablic) getCrashFreeUsers(ctx context.Context, url string) (float32, er
 	if err := chromedp.Run(ctx,
 		chromedp.Navigate(url),
 		chromedp.ActionFunc(func(ctxt context.Context) error {
-			ctxt, cancel := context.WithTimeout(ctxt, 10*time.Second)
-			defer cancel()
 			for {
 				if err := chromedp.Text(sel, &crashFreeUsers, chromedp.NodeVisible).Do(ctxt); err != nil {
 					return errors.WithStack(err)
