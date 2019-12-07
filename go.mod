@@ -1,5 +1,7 @@
 module github.com/li-go/chromedp-samples
 
+go 1.13
+
 require (
 	github.com/chromedp/cdproto v0.0.0-20190609032908-dd39f0bf0a54
 	github.com/chromedp/chromedp v0.3.1-0.20190617065505-d55cf9043e05
