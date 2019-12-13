@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"time"
 
 	"github.com/chromedp/chromedp"
 
@@ -15,8 +14,7 @@ func main() {
 	defer cancel()
 
 	if err := chromedp.Run(ctx, chromedp.Tasks{
-		chromedp.Navigate("https://www.google.com/"),
-		chromedp.Sleep(time.Second),
+		chromedp.Navigate("https://github.com/li-go"),
 		samples.CaptureAction,
 	}); err != nil {
 		log.Fatal(err)
