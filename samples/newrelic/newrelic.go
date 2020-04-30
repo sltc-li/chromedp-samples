@@ -125,7 +125,7 @@ func (n *newrelic) fapAppResponseActions(transactionID string, appResponse *int)
 			return errors.WithStack(err)
 		}
 		var err error
-		*appResponse, err = strconv.Atoi(strings.TrimRight(text, " ms"))
+		*appResponse, err = strconv.Atoi(strings.Replace(strings.TrimRight(text, " ms"), ",", "", -1))
 		if err != nil {
 			n.logger.Printf("Cannot extract app response: %+v", err)
 		}
